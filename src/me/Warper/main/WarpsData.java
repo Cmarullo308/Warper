@@ -6,9 +6,11 @@ import java.util.HashMap;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -20,6 +22,7 @@ public class WarpsData {
 
 	Inventory mainMenu;
 	WarpsList globalWarps;
+	Warp spawn;
 	HashMap<UUID, WarpsList> privateWarps = new HashMap<UUID, WarpsList>();
 
 	public FileConfiguration warpsFileConfig;
@@ -27,7 +30,7 @@ public class WarpsData {
 
 	public WarpsData(Warper plugin) {
 		this.plugin = plugin;
-		globalWarps  = new WarpsList(plugin);
+		globalWarps = new WarpsList(plugin);
 
 		ItemStack[] menuItems = new ItemStack[27];
 		ItemMeta meta;
@@ -63,8 +66,35 @@ public class WarpsData {
 		close.setItemMeta(meta);
 		menuItems[22] = close;
 
-		mainMenu = Bukkit.createInventory(null, 27, "Warper Menu");
+		mainMenu = Bukkit.createInventory(null, 27, ChatColor.DARK_BLUE + "Warper Menu");
 		mainMenu.setContents(menuItems);
+	}
+
+	public void saveGlobalWarps() {
+		
+	}
+
+	public void saveWarpsData() {
+		try {
+			warpsFileConfig.save(warpsFile);
+		} catch (IOException e) {
+			plugin.getServer().getLogger().info(ChatColor.RED + "Could not save networks.yml file");
+		}
+	}
+
+	public WarpsList getPrivateWarps(UUID playerID) {
+		return privateWarps.get(playerID);
+	}
+
+	public boolean teleportToSpawn(Player player) {
+		if (spawn == null) {
+			return false;
+		}
+
+		Location location = new Location(plugin.getServer().getWorld(spawn.worldName), spawn.x, spawn.y, spawn.z,
+				spawn.yaw, spawn.pitch);
+		player.teleport(location);
+		return true;
 	}
 
 	public void setup() {

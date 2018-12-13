@@ -3,6 +3,7 @@ package me.Warper.main;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.HumanEntity;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
@@ -14,51 +15,108 @@ import net.md_5.bungee.api.ChatColor;
 
 public class EventListener implements Listener {
 	Warper plugin;
+	WarpsData warpsData;
 
 	public EventListener(Warper plugin) {
 		this.plugin = plugin;
+		warpsData = plugin.warpsData;
 	}
 
 	@EventHandler
 	public void onInventoryClickEvent(InventoryClickEvent event) {
-		if (event.getInventory().getName().equals("Warper Menu")) {
-			event.setCancelled(true);
-			switch (event.getSlot()) {
-			case 10: // Global Warps
+		try {
+			if (event.getInventory().getName().substring(2).equals("Warper Menu")) {
 				event.setCancelled(true);
-				openGlobalWarpsList(event.getWhoClicked(), 1);
-				break;
-			default:
-				break;
-			}
-		} else if (event.getInventory().getName().substring(2, 14).equals("Global Warps")) {
-			if (event.getSlot() == 53) {
-				event.setCancelled(true);
-				int pageCurrentlyOn = Integer.parseInt(event.getInventory().getName().substring(22));
-				if (pageCurrentlyOn < plugin.warpsData.globalWarps.numberOfPages) {
-					openGlobalWarpsList(event.getWhoClicked(), pageCurrentlyOn + 1);
-				}
-			} else if (event.getSlot() == 45) {
-				event.setCancelled(true);
-				int pageCurrentlyOn = Integer.parseInt(event.getInventory().getName().substring(22));
-				plugin.consoleMessageD(pageCurrentlyOn + "////");
-				if (pageCurrentlyOn > 1) {
-					openGlobalWarpsList(event.getWhoClicked(), pageCurrentlyOn - 1);
+				switch (event.getSlot()) {
+				case 10: // Global Warps
+					openGlobalWarpsList(event.getWhoClicked(), 1);
+					break;
+				case 13: // Private warps
+					openPrivateWarpsList(event.getWhoClicked(), 1);
+					break;
+				case 16:
+					warpToSpawn(event.getWhoClicked());
+					break;
+				case 22:
+					event.getWhoClicked().getOpenInventory().close();
+					break;
+				default:
+					break;
 				}
 			}
+			// Global warps
+			else if (event.getInventory().getName().substring(2, 14).equals("Global Warps")) {
+				event.setCancelled(true);
+				if (event.getSlot() == 53) {
+					int pageCurrentlyOn = Integer.parseInt(event.getInventory().getName().substring(22));
+					if (pageCurrentlyOn < plugin.warpsData.globalWarps.numberOfPages) {
+						openGlobalWarpsList(event.getWhoClicked(), pageCurrentlyOn + 1);
+					}
+				} else if (event.getSlot() == 45) {
+					int pageCurrentlyOn = Integer.parseInt(event.getInventory().getName().substring(22));
+					if (pageCurrentlyOn > 1) {
+						openGlobalWarpsList(event.getWhoClicked(), pageCurrentlyOn - 1);
+					}
+				} else if (event.getInventory().getContents()[event.getSlot()] != null) {
+					String warpName = event.getInventory().getContents()[event.getSlot()].getItemMeta()
+							.getDisplayName();
+					warpsData.globalWarps.warpPlayerTo((Player) event.getWhoClicked(), warpName);
+				}
+			}
+			// Private Warps
+			else if (event.getInventory().getName().substring(2, 15).equals("Private Warps")) {
+
+				event.setCancelled(true);
+				WarpsList warpsList = warpsData.getPrivateWarps(event.getWhoClicked().getUniqueId());
+				if (event.getSlot() == 53) {
+					int pageCurrentlyOn = Integer.parseInt(event.getInventory().getName().substring(22));
+					if (pageCurrentlyOn < warpsList.numberOfPages) {
+						openPrivateWarpsList(event.getWhoClicked(), pageCurrentlyOn + 1);
+					}
+				} else if (event.getSlot() == 45) {
+					int pageCurrentlyOn = Integer.parseInt(event.getInventory().getName().substring(22));
+					if (pageCurrentlyOn > 1) {
+						openPrivateWarpsList(event.getWhoClicked(), pageCurrentlyOn - 1);
+					}
+				} else if (event.getInventory().getContents()[event.getSlot()] != null) {
+					String warpName = event.getInventory().getContents()[event.getSlot()].getItemMeta()
+							.getDisplayName();
+					warpsList.warpPlayerTo((Player) event.getWhoClicked(), warpName);
+				}
+			}
+		} catch (StringIndexOutOfBoundsException e) {
+			//Normal inventory
 		}
 	}
 
-	private void openGlobalWarpsList(HumanEntity whoClicked, int pageNum) {
+	private void warpToSpawn(HumanEntity whoClicked) {
+		if (warpsData.teleportToSpawn((Player) whoClicked) == false) {
+			whoClicked.sendMessage(ChatColor.RED + "No spawn set");
+			return;
+		}
+	}
+
+	private void openPrivateWarpsList(HumanEntity player, int pageNum) {
+		WarpsList privateWarpList = warpsData.getPrivateWarps(player.getUniqueId());
+		if (privateWarpList == null) {
+			player.sendMessage(ChatColor.RED + "No private warps set");
+			return;
+		}
+		Inventory page = Bukkit.createInventory(null, 54, ChatColor.GREEN + "Private Warps - Page " + pageNum);
+		page.setContents(privateWarpList.getPage(pageNum));
+		player.openInventory(page);
+	}
+
+	private void openGlobalWarpsList(HumanEntity player, int pageNum) {
 		Inventory page = Bukkit.createInventory(null, 54, ChatColor.GREEN + "Global Warps - Page " + pageNum);
 		page.setContents(plugin.warpsData.globalWarps.getPage(pageNum));
-		whoClicked.openInventory(page);
+		player.openInventory(page);
 	}
 
 	@EventHandler
 	public void ballFiring(PlayerInteractEvent event) {
 		// If not a right click
-		if (event.getAction() != Action.RIGHT_CLICK_AIR || event.getAction() != Action.RIGHT_CLICK_AIR) {
+		if (event.getAction() != Action.RIGHT_CLICK_AIR && event.getAction() != Action.RIGHT_CLICK_BLOCK) {
 			return;
 		}
 

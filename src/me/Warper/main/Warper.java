@@ -11,6 +11,7 @@ import me.Warper.main.EventListener;
 
 public class Warper extends JavaPlugin {
 	WarpsData warpsData = new WarpsData(this);
+	CommandHandler commandHandler = new CommandHandler(this);
 
 	boolean debugMessagesEnabled = true;
 
@@ -29,18 +30,10 @@ public class Warper extends JavaPlugin {
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-
-		switch (args[0].toLowerCase()) {
-		case "test":
-			testCommand(sender, args);
-			break;
-		default:
-			break;
-		}
-
-		return true;
+		return commandHandler.onCommand(sender, command, label, args);
 	}
 
+	@SuppressWarnings("unused")
 	private void testCommand(CommandSender sender, String[] args) {
 
 		Player player = (Player) sender;

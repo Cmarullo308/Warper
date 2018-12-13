@@ -3,7 +3,9 @@ package me.Warper.main;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -17,10 +19,6 @@ public class WarpsList {
 
 	int numberOfPages;
 
-	public void test() {
-		plugin.getLogger().info("TESTTTTTT");
-	}
-
 	public WarpsList(Warper plugin) {
 		this.plugin = plugin;
 		updateNumberOfPages();
@@ -30,7 +28,6 @@ public class WarpsList {
 		this.plugin = plugin;
 		this.warps = warps;
 		updateNumberOfPages();
-//		setupPages();
 	}
 
 	private void updateNumberOfPages() {
@@ -46,7 +43,42 @@ public class WarpsList {
 	public void addWarp(Warp newWarp) {
 		warps.add(newWarp);
 		Collections.sort(warps);
-//		setupPages();
+	}
+
+	public void warpPlayerTo(Player player, String warpName) {
+		for (Warp warp : warps) {
+			if (warp.warpName.equals(warpName)) {
+				Location location = new Location(plugin.getServer().getWorld(warp.worldName), warp.x, warp.y, warp.z,
+						warp.yaw, warp.pitch);
+				player.teleport(location);
+			}
+		}
+	}
+
+	public void warpPlayerTo(Player player, Warp warp) {
+		Location location = new Location(plugin.getServer().getWorld(warp.worldName), warp.x, warp.y, warp.z, warp.yaw,
+				warp.pitch);
+		player.teleport(location);
+	}
+
+	public Warp getWarp(String warpName) {
+		for (Warp warp : warps) {
+			if (warp.warpName.equals(warpName)) {
+				return warp;
+			}
+		}
+
+		return null;
+	}
+
+	public boolean warpExists(String warpName) {
+		for (Warp warp : warps) {
+			if (warp.warpName.equals(warpName)) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 //	private void setupPages() {
@@ -94,8 +126,8 @@ public class WarpsList {
 	public ItemStack[] getPage(int pageNum) {
 		updateNumberOfPages();
 
-		if (pageNum > numberOfPages) {
-			plugin.consoleMessageD("EOEOEOEOEOEOEOEOEOEOEOEO ERROR");
+		if (pageNum > numberOfPages && pageNum != 1) {
+			plugin.consoleMessageD("Page num error");
 		}
 
 		ItemStack[] contents = new ItemStack[54];

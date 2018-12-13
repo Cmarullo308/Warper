@@ -5,7 +5,13 @@ version: 1.0
 api-version: 1.13
 description: Creates warps
 commands:
-   Warper:
-      aliases: [w]
-      usage: /<Warper> [command]
-      description: Main command
+   SetPrivateWarp:
+      aliases: [spw]
+      usage: /<SetPrivateWarp> <WarpName> [Icon Material]
+      description: Set's a private warp
+   SetGlobalWarp:
+      aliases: [sgw]
+      usage: /<SetGlobalWarp> <WarpName> [Icon Material]
+   SetSpawnLocation:
+      aliases: [ssl]
+      usage: /<SetSpawnLocation>

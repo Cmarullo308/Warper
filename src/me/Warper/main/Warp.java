@@ -28,5 +28,4 @@ public class Warp implements Comparable<Warp> {
 	public int compareTo(Warp anotherWarp) {
 		return this.warpName.compareTo(anotherWarp.warpName);
 	}
-
 }
