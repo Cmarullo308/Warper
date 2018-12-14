@@ -18,6 +18,10 @@ commands:
     aliases:
     - ssl
     usage: /<SetSpawnLocation>
+  RemoveSpawnLocation:
+    aliases:
+    - rsl
+    usage: /<RemoveSpawnLocation>
   RemoveGlobalWarp:
     aliases:
     - rgw

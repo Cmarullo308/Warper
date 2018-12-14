@@ -1,2 +1,6 @@
 warper.setwarp.global
 warper.setwarp.private
+warper.removewarp.global
+warper.removewarp.private
+warper.setspawn
+warper.removespawn

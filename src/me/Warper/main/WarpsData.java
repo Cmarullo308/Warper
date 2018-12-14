@@ -71,6 +71,22 @@ public class WarpsData {
 		mainMenu.setContents(menuItems);
 	}
 
+	public void saveSpawnWarp() {
+		if (spawn != null) {
+			warpsFileConfig.set("Spawn-Warp." + "world", spawn.worldName);
+			warpsFileConfig.set("Spawn-Warp." + "x", spawn.x);
+			warpsFileConfig.set("Spawn-Warp." + "y", spawn.y);
+			warpsFileConfig.set("Spawn-Warp." + "z", spawn.z);
+			warpsFileConfig.set("Spawn-Warp." + "yaw", spawn.yaw);
+			warpsFileConfig.set("Spawn-Warp." + "pitch", spawn.pitch);
+			warpsFileConfig.set("Spawn-Warp." + "icon", spawn.icon.toString());
+		} else {
+			warpsFileConfig.set("Spawn-Warp", null);
+		}
+
+		saveWarpsData();
+	}
+
 	public void saveGlobalWarps() {
 		for (Warp warp : globalWarps.warps) {
 			String path = "Global-Warps." + warp.warpName;
@@ -183,7 +199,7 @@ public class WarpsData {
 			uuids = null;
 		}
 
-		if (warps != null) { // No private warps
+		if (uuids != null) { // No private warps
 			for (String uuidString : uuids) { // For each players warps
 				UUID uuid = UUID.fromString(uuidString);
 				privateWarps.put(UUID.fromString(uuidString), new WarpsList(plugin));
@@ -215,6 +231,24 @@ public class WarpsData {
 				}
 
 			}
+		}
+
+		// ---Spawn warp
+		if (warpsFileConfig.getConfigurationSection("Spawn-Warp") != null) {
+			String worldName = warpsFileConfig.getString("Spawn-Warp" + ".world");
+			double x = warpsFileConfig.getDouble("Spawn-Warp" + ".x");
+			double y = warpsFileConfig.getDouble("Spawn-Warp" + ".y");
+			double z = warpsFileConfig.getDouble("Spawn-Warp" + ".z");
+			float yaw = (float) warpsFileConfig.getDouble("Spawn-Warp" + ".yaw");
+			float pitch = (float) warpsFileConfig.getDouble("Spawn-Warp" + ".pitch");
+			Material icon;
+			try {
+				icon = Material.valueOf(warpsFileConfig.getString("Spawn-Warp" + ".icon"));
+			} catch (IllegalArgumentException e) {
+				icon = plugin.defaultIcon;
+			}
+
+			spawn = new Warp("Spawn-Warp", worldName, x, y, z, yaw, pitch, icon);
 		}
 
 	}

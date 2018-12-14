@@ -28,20 +28,29 @@ public class CommandHandler {
 		case "setprivatewarp":
 			setPrivateWarp(sender, args);
 			break;
-		case "setspawnlocation":
-			setSpawnLocation(sender, args);
-			break;
 		case "removeglobalwarp":
 			removeGlobalWarp(sender, args);
 			break;
 		case "removeprivatewarp":
 			removePrivateWarp(sender, args);
 			break;
+		case "setspawnlocation":
+			setSpawnLocation(sender, args);
+			break;
+		case "removespawnlocation":
+			removeSpawnLocation(sender, args);
+			break;
 		default:
 			break;
 		}
 
 		return true;
+	}
+
+	private void removeSpawnLocation(CommandSender sender, String[] args) {
+		warpsData.spawn = null;
+		warpsData.saveSpawnWarp();
+		sender.sendMessage(ChatColor.GREEN + "Spawn location removed");
 	}
 
 	private void removePrivateWarp(CommandSender sender, String[] args) {
@@ -114,6 +123,8 @@ public class CommandHandler {
 				newSpawnLocation.getPitch(), Material.GRASS_BLOCK);
 
 		sender.sendMessage(ChatColor.GREEN + "Spawn location set");
+
+		warpsData.saveSpawnWarp();
 	}
 
 	private void setPrivateWarp(CommandSender sender, String[] args) {
