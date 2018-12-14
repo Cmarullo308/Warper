@@ -12,6 +12,8 @@ import me.Warper.main.EventListener;
 public class Warper extends JavaPlugin {
 	WarpsData warpsData = new WarpsData(this);
 	CommandHandler commandHandler = new CommandHandler(this);
+	
+	Material defaultIcon = Material.GRASS_BLOCK;
 
 	boolean debugMessagesEnabled = true;
 
@@ -23,9 +25,14 @@ public class Warper extends JavaPlugin {
 
 	@Override
 	public void onEnable() {
-		consoleMessageD("SHITTTTTT");
-
+		getConfig().options().copyDefaults(true);
+		saveConfig();
+		
+		warpsData.setup();
+//		warpsData.
+		
 		this.getServer().getPluginManager().registerEvents(new EventListener(this), this);
+		consoleMessage("Warper loaded");
 	}
 
 	@Override

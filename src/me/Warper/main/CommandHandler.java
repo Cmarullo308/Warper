@@ -31,11 +31,75 @@ public class CommandHandler {
 		case "setspawnlocation":
 			setSpawnLocation(sender, args);
 			break;
+		case "removeglobalwarp":
+			removeGlobalWarp(sender, args);
+			break;
+		case "removeprivatewarp":
+			removePrivateWarp(sender, args);
+			break;
 		default:
 			break;
 		}
 
 		return true;
+	}
+
+	private void removePrivateWarp(CommandSender sender, String[] args) {
+		if (args.length != 1) {
+			invalidNumOfArgsMessage(sender);
+			return;
+		}
+
+		if (!(sender instanceof Player)) {
+			mustBeAPlayer(sender);
+			return;
+		}
+
+		Player player = (Player) sender;
+
+		String warpName = args[0];
+		WarpsList warpList = warpsData.privateWarps.get(player.getUniqueId());
+
+		if (warpList == null) {
+			sender.sendMessage(ChatColor.RED + "No warp named " + ChatColor.YELLOW + warpName);
+			return;
+		}
+
+		for (Warp warp : warpList.warps) {
+			if (warp.warpName.equals(warpName)) {
+				warpList.warps.remove(warp);
+				sender.sendMessage(
+						ChatColor.GREEN + "Warp " + ChatColor.YELLOW + warpName + ChatColor.GREEN + " removed");
+				warpsData.warpsFileConfig.set("Private-Warps." + player.getUniqueId().toString() + "." + warp.warpName,
+						null);
+				warpsData.savePlayerWarps(player.getUniqueId());
+				return;
+			}
+		}
+
+		sender.sendMessage(ChatColor.RED + "No warp named " + ChatColor.YELLOW + warpName);
+	}
+
+	private void removeGlobalWarp(CommandSender sender, String[] args) {
+		if (args.length != 1) {
+			invalidNumOfArgsMessage(sender);
+			return;
+		}
+
+		String warpName = args[0];
+
+		for (Warp warp : warpsData.globalWarps.warps) {
+			if (warp.warpName.equals(warpName)) {
+				warpsData.globalWarps.warps.remove(warp);
+				sender.sendMessage(
+						ChatColor.GREEN + "Warp " + ChatColor.YELLOW + warpName + ChatColor.GREEN + " removed");
+				warpsData.warpsFileConfig.set("Global-Warps." + warp.warpName, null);
+				warpsData.saveGlobalWarps();
+				return;
+			}
+		}
+
+		sender.sendMessage(ChatColor.RED + "No warp named " + ChatColor.YELLOW + warpName);
 	}
 
 	private void setSpawnLocation(CommandSender sender, String[] args) {
@@ -48,6 +112,8 @@ public class CommandHandler {
 		warpsData.spawn = new Warp("Spawn", newSpawnLocation.getWorld().getName(), newSpawnLocation.getX(),
 				newSpawnLocation.getY(), newSpawnLocation.getZ(), newSpawnLocation.getYaw(),
 				newSpawnLocation.getPitch(), Material.GRASS_BLOCK);
+
+		sender.sendMessage(ChatColor.GREEN + "Spawn location set");
 	}
 
 	private void setPrivateWarp(CommandSender sender, String[] args) {
@@ -93,6 +159,11 @@ public class CommandHandler {
 
 		warpsList.addWarp(new Warp(warpName, loc.getWorld().getName(), loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(),
 				loc.getPitch(), warpIcon));
+
+		warpsData.savePlayerWarps(playerID);
+
+		sender.sendMessage(
+				ChatColor.GREEN + "Private Warp " + ChatColor.YELLOW + warpName + ChatColor.GREEN + " created");
 	}
 
 	private void setGlobalWarp(CommandSender sender, String[] args) {
@@ -131,6 +202,11 @@ public class CommandHandler {
 
 		warpsData.globalWarps.addWarp(new Warp(warpName, loc.getWorld().getName(), loc.getX(), loc.getY(), loc.getZ(),
 				loc.getYaw(), loc.getPitch(), warpIcon));
+
+		warpsData.saveGlobalWarps();
+
+		sender.sendMessage(
+				ChatColor.GREEN + "Global Warp " + ChatColor.YELLOW + warpName + ChatColor.GREEN + " created");
 	}
 
 	private void mustBeAPlayer(CommandSender sender) {

@@ -5,13 +5,24 @@ version: 1.0
 api-version: 1.13
 description: Creates warps
 commands:
-   SetPrivateWarp:
-      aliases: [spw]
-      usage: /<SetPrivateWarp> <WarpName> [Icon Material]
-      description: Set's a private warp
-   SetGlobalWarp:
-      aliases: [sgw]
-      usage: /<SetGlobalWarp> <WarpName> [Icon Material]
-   SetSpawnLocation:
-      aliases: [ssl]
-      usage: /<SetSpawnLocation>
+  SetPrivateWarp:
+    aliases:
+    - spw
+    usage: /<SetPrivateWarp> <WarpName> [Icon Material]
+    description: Set's a private warp
+  SetGlobalWarp:
+    aliases:
+    - sgw
+    usage: /<SetGlobalWarp> <WarpName> [Icon Material]
+  SetSpawnLocation:
+    aliases:
+    - ssl
+    usage: /<SetSpawnLocation>
+  RemoveGlobalWarp:
+    aliases:
+    - rgw
+    usage: /<RemoveGlobalWarp> <WarpName>
+  RemovePrivateWarp:
+    aliases:
+    - rpw
+    usage: /<RemovePrivateWarp> <WarpName>

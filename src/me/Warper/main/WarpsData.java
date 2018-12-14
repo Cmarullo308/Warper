@@ -3,6 +3,7 @@ package me.Warper.main;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Set;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
@@ -71,7 +72,35 @@ public class WarpsData {
 	}
 
 	public void saveGlobalWarps() {
-		
+		for (Warp warp : globalWarps.warps) {
+			String path = "Global-Warps." + warp.warpName;
+			warpsFileConfig.set(path + ".world", warp.worldName);
+			warpsFileConfig.set(path + ".x", warp.x);
+			warpsFileConfig.set(path + ".y", warp.y);
+			warpsFileConfig.set(path + ".z", warp.z);
+			warpsFileConfig.set(path + ".yaw", warp.yaw);
+			warpsFileConfig.set(path + ".pith", warp.pitch);
+			warpsFileConfig.set(path + ".icon", warp.icon.toString());
+		}
+
+		saveWarpsData();
+	}
+
+	public void savePlayerWarps(UUID playerID) {
+		WarpsList warpsList = getPrivateWarps(playerID);
+
+		for (Warp warp : warpsList.warps) {
+			String path = "Private-Warps." + playerID + "." + warp.warpName;
+			warpsFileConfig.set(path + ".world", warp.worldName);
+			warpsFileConfig.set(path + ".x", warp.x);
+			warpsFileConfig.set(path + ".y", warp.y);
+			warpsFileConfig.set(path + ".z", warp.z);
+			warpsFileConfig.set(path + ".yaw", warp.yaw);
+			warpsFileConfig.set(path + ".pith", warp.pitch);
+			warpsFileConfig.set(path + ".icon", warp.icon.toString());
+		}
+
+		saveWarpsData();
 	}
 
 	public void saveWarpsData() {
@@ -102,15 +131,14 @@ public class WarpsData {
 			plugin.getDataFolder().mkdir();
 		}
 
-		warpsFile = new File(plugin.getDataFolder(), "groups.yml");
+		warpsFile = new File(plugin.getDataFolder(), "warps.yml");
 
 		if (!warpsFile.exists()) {
 			try {
 				warpsFile.createNewFile();
 			} catch (IOException e) {
-				plugin.getServer().getLogger().info(ChatColor.RED + "Could not create groups.yml file");
+				plugin.getServer().getLogger().info(ChatColor.RED + "Could not create warps.yml file");
 			}
-
 		}
 
 		warpsFileConfig = YamlConfiguration.loadConfiguration(warpsFile);
@@ -118,6 +146,76 @@ public class WarpsData {
 	}
 
 	private void loadWarps() {
+		// ---Global Warps
+		Set<String> warps;
+		try {
+			warps = warpsFileConfig.getConfigurationSection("Global-Warps").getKeys(false);
+		} catch (NullPointerException e) {
+			warps = null;
+		}
+
+		if (warps != null) {
+			for (String warp : warps) {
+				String path = "Global-Warps." + warp;
+
+				String world = warpsFileConfig.getString(path + ".world");
+				double x = warpsFileConfig.getDouble(path + ".x");
+				double y = warpsFileConfig.getDouble(path + ".y");
+				double z = warpsFileConfig.getDouble(path + ".z");
+				float yaw = (float) warpsFileConfig.getDouble(path + ".yaw");
+				float pitch = (float) warpsFileConfig.getDouble(path + ".pitch");
+				Material icon;
+				try {
+					icon = Material.valueOf(warpsFileConfig.getString(path + ".icon"));
+				} catch (IllegalArgumentException e) {
+					icon = plugin.defaultIcon;
+				}
+				globalWarps.addWarp(new Warp(warp, world, x, y, z, yaw, pitch, icon));
+			}
+		}
+
+		Set<String> uuids;
+
+		// ---Private warps
+		try {
+			uuids = warpsFileConfig.getConfigurationSection("Private-Warps").getKeys(false);
+		} catch (NullPointerException e) {
+			uuids = null;
+		}
+
+		if (warps != null) { // No private warps
+			for (String uuidString : uuids) { // For each players warps
+				UUID uuid = UUID.fromString(uuidString);
+				privateWarps.put(UUID.fromString(uuidString), new WarpsList(plugin));
+				try {
+					warps = warpsFileConfig.getConfigurationSection("Private-Warps." + uuidString).getKeys(false);
+				} catch (NullPointerException e) {
+					warps = null;
+				}
+
+				if (warps != null) { // If player has warps
+					for (String warpName : warps) { // for each warp
+						String path = "Private-Warps." + uuidString + "." + warpName;
+
+						String world = warpsFileConfig.getString(path + ".world");
+						double x = warpsFileConfig.getDouble(path + ".x");
+						double y = warpsFileConfig.getDouble(path + ".y");
+						double z = warpsFileConfig.getDouble(path + ".z");
+						float yaw = (float) warpsFileConfig.getDouble(path + ".yaw");
+						float pitch = (float) warpsFileConfig.getDouble(path + ".pitch");
+						Material icon;
+						try {
+							icon = Material.valueOf(warpsFileConfig.getString(path + ".icon"));
+						} catch (IllegalArgumentException e) {
+							icon = plugin.defaultIcon;
+						}
+
+						privateWarps.get(uuid).addWarp(new Warp(warpName, world, x, y, z, yaw, pitch, icon));
+					}
+				}
+
+			}
+		}
 
 	}
 }
