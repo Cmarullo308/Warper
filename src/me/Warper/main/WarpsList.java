@@ -165,6 +165,13 @@ public class WarpsList {
 			contents[53] = nextPage;
 		}
 
+		// Close button
+		ItemStack closeButton = new ItemStack(Material.BARRIER);
+		ItemMeta meta = closeButton.getItemMeta();
+		meta.setDisplayName(ChatColor.RED + "Close Menu");
+		closeButton.setItemMeta(meta);
+		contents[49] = closeButton;
+
 		return contents;
 
 //		return contentPages.get(pageNum - 1);

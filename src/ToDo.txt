@@ -1,2 +1,1 @@
-Permissions
-material name in command can be lowercase
+menu size changes

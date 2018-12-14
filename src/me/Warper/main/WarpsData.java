@@ -61,7 +61,7 @@ public class WarpsData {
 		// -------------
 
 		// Close Menu
-		ItemStack close = new ItemStack(Material.RED_CONCRETE);
+		ItemStack close = new ItemStack(Material.BARRIER);
 		meta = close.getItemMeta();
 		meta.setDisplayName(ChatColor.RED + "Close Menu");
 		close.setItemMeta(meta);

@@ -40,11 +40,18 @@ public class CommandHandler {
 		case "removespawnlocation":
 			removeSpawnLocation(sender, args);
 			break;
+		case "warper":
+			helpCommand(sender, args);
+			break;
 		default:
 			break;
 		}
 
 		return true;
+	}
+
+	private void helpCommand(CommandSender sender, String[] args) {
+		sender.sendMessage(plugin.helpMessage);
 	}
 
 	private void removeSpawnLocation(CommandSender sender, String[] args) {
@@ -183,7 +190,7 @@ public class CommandHandler {
 
 		if (args.length == 2) {
 			try {
-				warpIcon = Material.valueOf(args[1]);
+				warpIcon = Material.valueOf(args[1].toUpperCase());
 			} catch (IllegalArgumentException e) {
 				sender.sendMessage(ChatColor.RED + "Invalid material name");
 				return;
@@ -231,7 +238,7 @@ public class CommandHandler {
 
 		if (args.length == 2) {
 			try {
-				warpIcon = Material.valueOf(args[1]);
+				warpIcon = Material.valueOf(args[1].toUpperCase());
 			} catch (IllegalArgumentException e) {
 				sender.sendMessage(ChatColor.RED + "Invalid material name");
 				return;

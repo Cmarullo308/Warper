@@ -12,8 +12,10 @@ import me.Warper.main.EventListener;
 public class Warper extends JavaPlugin {
 	WarpsData warpsData = new WarpsData(this);
 	CommandHandler commandHandler = new CommandHandler(this);
-	
+
 	Material defaultIcon = Material.GRASS_BLOCK;
+
+	String helpMessage;
 
 	boolean debugMessagesEnabled = true;
 
@@ -27,12 +29,23 @@ public class Warper extends JavaPlugin {
 	public void onEnable() {
 		getConfig().options().copyDefaults(true);
 		saveConfig();
-		
+
 		warpsData.setup();
-//		warpsData.
-		
+
+		createHelpMessage();
+
 		this.getServer().getPluginManager().registerEvents(new EventListener(this), this);
 		consoleMessage("Warper loaded");
+	}
+
+	private void createHelpMessage() {
+		helpMessage = "Commands\n";
+		helpMessage += "/setglobalwarp <WarpName> <Material for icon>\n";
+		helpMessage += "/removeglobalwarp <WarpName>\n";
+		helpMessage += "/setprivatewarp <WarpName> <Material for icon>\n";
+		helpMessage += "/removeprivatewarp <WarpName>\n";
+		helpMessage += "/setspawnlocation\n";
+		helpMessage += "/removespawnlocation\n";
 	}
 
 	@Override

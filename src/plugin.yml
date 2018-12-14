@@ -30,6 +30,10 @@ commands:
     aliases:
     - rpw
     usage: /<RemovePrivateWarp> <WarpName>
+  Warper:
+    aliases:
+    - w
+    usage: /<Warper>
 permissions:
   warper.setwarp.private:
     default: true

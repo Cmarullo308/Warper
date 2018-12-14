@@ -57,6 +57,8 @@ public class EventListener implements Listener {
 					if (pageCurrentlyOn > 1) {
 						openGlobalWarpsList(event.getWhoClicked(), pageCurrentlyOn - 1);
 					}
+				} else if (event.getSlot() == 49) {
+					event.getWhoClicked().openInventory(plugin.warpsData.mainMenu);
 				} else if (event.getInventory().getContents()[event.getSlot()] != null) {
 					String warpName = event.getInventory().getContents()[event.getSlot()].getItemMeta()
 							.getDisplayName();
@@ -78,6 +80,8 @@ public class EventListener implements Listener {
 					if (pageCurrentlyOn > 1) {
 						openPrivateWarpsList(event.getWhoClicked(), pageCurrentlyOn - 1);
 					}
+				} else if (event.getSlot() == 49) {
+					event.getWhoClicked().openInventory(plugin.warpsData.mainMenu);
 				} else if (event.getInventory().getContents()[event.getSlot()] != null) {
 					String warpName = event.getInventory().getContents()[event.getSlot()].getItemMeta()
 							.getDisplayName();
@@ -85,7 +89,7 @@ public class EventListener implements Listener {
 				}
 			}
 		} catch (StringIndexOutOfBoundsException e) {
-			//Normal inventory
+			// Normal inventory
 		}
 	}
 
