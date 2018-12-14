@@ -48,12 +48,22 @@ public class CommandHandler {
 	}
 
 	private void removeSpawnLocation(CommandSender sender, String[] args) {
+		if (!sender.hasPermission("warper.removespawn")) {
+			noPermission(sender);
+			return;
+		}
+
 		warpsData.spawn = null;
 		warpsData.saveSpawnWarp();
 		sender.sendMessage(ChatColor.GREEN + "Spawn location removed");
 	}
 
 	private void removePrivateWarp(CommandSender sender, String[] args) {
+		if (!sender.hasPermission("warper.removewarp.private")) {
+			noPermission(sender);
+			return;
+		}
+
 		if (args.length != 1) {
 			invalidNumOfArgsMessage(sender);
 			return;
@@ -90,6 +100,11 @@ public class CommandHandler {
 	}
 
 	private void removeGlobalWarp(CommandSender sender, String[] args) {
+		if (!sender.hasPermission("warper.removewarp.global")) {
+			noPermission(sender);
+			return;
+		}
+
 		if (args.length != 1) {
 			invalidNumOfArgsMessage(sender);
 			return;
@@ -112,6 +127,10 @@ public class CommandHandler {
 	}
 
 	private void setSpawnLocation(CommandSender sender, String[] args) {
+		if (!sender.hasPermission("warper.setspawn")) {
+			noPermission(sender);
+			return;
+		}
 		if (!(sender instanceof Player)) {
 			mustBeAPlayer(sender);
 			return;
@@ -128,6 +147,11 @@ public class CommandHandler {
 	}
 
 	private void setPrivateWarp(CommandSender sender, String[] args) {
+		if (!sender.hasPermission("warper.setwarp.private")) {
+			noPermission(sender);
+			return;
+		}
+
 		if (args.length < 1 || args.length > 2) {
 			invalidNumOfArgsMessage(sender);
 			return;
@@ -178,6 +202,11 @@ public class CommandHandler {
 	}
 
 	private void setGlobalWarp(CommandSender sender, String[] args) {
+		if (!sender.hasPermission("warper.setwarp.global")) {
+			noPermission(sender);
+			return;
+		}
+
 		if (args.length < 1 || args.length > 2) {
 			invalidNumOfArgsMessage(sender);
 			return;
@@ -218,6 +247,10 @@ public class CommandHandler {
 
 		sender.sendMessage(
 				ChatColor.GREEN + "Global Warp " + ChatColor.YELLOW + warpName + ChatColor.GREEN + " created");
+	}
+
+	private void noPermission(CommandSender sender) {
+		sender.sendMessage(ChatColor.RED + "You do not have permission to use this command");
 	}
 
 	private void mustBeAPlayer(CommandSender sender) {
