@@ -10,7 +10,6 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
-
 import net.md_5.bungee.api.ChatColor;
 
 public class EventListener implements Listener {
@@ -24,8 +23,10 @@ public class EventListener implements Listener {
 
 	@EventHandler
 	public void onInventoryClickEvent(InventoryClickEvent event) {
+		String inventoryName = event.getView().getTitle();
+
 		try {
-			if (event.getInventory().getName().substring(2).equals("Warper Menu")) {
+			if (inventoryName.substring(2).equals("Warper Menu")) {
 				event.setCancelled(true);
 				switch (event.getSlot()) {
 				case 10: // Global Warps
@@ -45,15 +46,15 @@ public class EventListener implements Listener {
 				}
 			}
 			// Global warps
-			else if (event.getInventory().getName().substring(2, 14).equals("Global Warps")) {
+			else if (inventoryName.substring(2, 14).equals("Global Warps")) {
 				event.setCancelled(true);
 				if (event.getSlot() == 53) {
-					int pageCurrentlyOn = Integer.parseInt(event.getInventory().getName().substring(22));
+					int pageCurrentlyOn = Integer.parseInt(inventoryName.substring(22));
 					if (pageCurrentlyOn < plugin.warpsData.globalWarps.numberOfPages) {
 						openGlobalWarpsList(event.getWhoClicked(), pageCurrentlyOn + 1);
 					}
 				} else if (event.getSlot() == 45) {
-					int pageCurrentlyOn = Integer.parseInt(event.getInventory().getName().substring(22));
+					int pageCurrentlyOn = Integer.parseInt(inventoryName.substring(22));
 					if (pageCurrentlyOn > 1) {
 						openGlobalWarpsList(event.getWhoClicked(), pageCurrentlyOn - 1);
 					}
@@ -66,17 +67,17 @@ public class EventListener implements Listener {
 				}
 			}
 			// Private Warps
-			else if (event.getInventory().getName().substring(2, 15).equals("Private Warps")) {
+			else if (inventoryName.substring(2, 15).equals("Private Warps")) {
 
 				event.setCancelled(true);
 				WarpsList warpsList = warpsData.getPrivateWarps(event.getWhoClicked().getUniqueId());
 				if (event.getSlot() == 53) {
-					int pageCurrentlyOn = Integer.parseInt(event.getInventory().getName().substring(22));
+					int pageCurrentlyOn = Integer.parseInt(inventoryName.substring(22));
 					if (pageCurrentlyOn < warpsList.numberOfPages) {
 						openPrivateWarpsList(event.getWhoClicked(), pageCurrentlyOn + 1);
 					}
 				} else if (event.getSlot() == 45) {
-					int pageCurrentlyOn = Integer.parseInt(event.getInventory().getName().substring(22));
+					int pageCurrentlyOn = Integer.parseInt(inventoryName.substring(22));
 					if (pageCurrentlyOn > 1) {
 						openPrivateWarpsList(event.getWhoClicked(), pageCurrentlyOn - 1);
 					}

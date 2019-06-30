@@ -37,7 +37,7 @@ public class WarpsData {
 		ItemMeta meta;
 
 		// Global warps item
-		ItemStack globalWarps = new ItemStack(Material.SIGN);
+		ItemStack globalWarps = new ItemStack(Material.OAK_SIGN);
 		meta = globalWarps.getItemMeta();
 		meta.setDisplayName(ChatColor.GREEN + "Global Warps");
 		globalWarps.setItemMeta(meta);
