@@ -25,6 +25,8 @@ public class EventListener implements Listener {
 	public void onInventoryClickEvent(InventoryClickEvent event) {
 		String inventoryName = event.getView().getTitle();
 
+		plugin.consoleMessage(event.getSlot() + "--------------");
+		
 		try {
 			if (inventoryName.substring(2).equals("Warper Menu")) {
 				event.setCancelled(true);
@@ -83,7 +85,7 @@ public class EventListener implements Listener {
 					}
 				} else if (event.getSlot() == 49) {
 					event.getWhoClicked().openInventory(plugin.warpsData.mainMenu);
-				} else if (event.getInventory().getContents()[event.getSlot()] != null) {
+				} else if (event.getInventory().getContents()[event.getSlot()] != null) { //----------
 					String warpName = event.getInventory().getContents()[event.getSlot()].getItemMeta()
 							.getDisplayName();
 					warpsList.warpPlayerTo((Player) event.getWhoClicked(), warpName);
@@ -91,6 +93,8 @@ public class EventListener implements Listener {
 			}
 		} catch (StringIndexOutOfBoundsException e) {
 			// Normal inventory
+		} catch (ArrayIndexOutOfBoundsException e) {
+			// Sometimes randomly thinks there's a -999th slot
 		}
 	}
 
