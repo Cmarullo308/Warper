@@ -24,8 +24,6 @@ public class EventListener implements Listener {
 	@EventHandler
 	public void onInventoryClickEvent(InventoryClickEvent event) {
 		String inventoryName = event.getView().getTitle();
-
-		plugin.consoleMessage(event.getSlot() + "--------------");
 		
 		try {
 			if (inventoryName.substring(2).equals("Warper Menu")) {
