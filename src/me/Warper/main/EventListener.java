@@ -72,12 +72,12 @@ public class EventListener implements Listener {
 				event.setCancelled(true);
 				WarpsList warpsList = warpsData.getPrivateWarps(event.getWhoClicked().getUniqueId());
 				if (event.getSlot() == 53) {
-					int pageCurrentlyOn = Integer.parseInt(inventoryName.substring(22));
+					int pageCurrentlyOn = Integer.parseInt(inventoryName.substring(23));
 					if (pageCurrentlyOn < warpsList.numberOfPages) {
 						openPrivateWarpsList(event.getWhoClicked(), pageCurrentlyOn + 1);
 					}
 				} else if (event.getSlot() == 45) {
-					int pageCurrentlyOn = Integer.parseInt(inventoryName.substring(22));
+					int pageCurrentlyOn = Integer.parseInt(inventoryName.substring(23));
 					if (pageCurrentlyOn > 1) {
 						openPrivateWarpsList(event.getWhoClicked(), pageCurrentlyOn - 1);
 					}

@@ -95,7 +95,7 @@ public class WarpsData {
 			warpsFileConfig.set(path + ".y", warp.y);
 			warpsFileConfig.set(path + ".z", warp.z);
 			warpsFileConfig.set(path + ".yaw", warp.yaw);
-			warpsFileConfig.set(path + ".pith", warp.pitch);
+			warpsFileConfig.set(path + ".pitch", warp.pitch);
 			warpsFileConfig.set(path + ".icon", warp.icon.toString());
 		}
 
@@ -112,7 +112,7 @@ public class WarpsData {
 			warpsFileConfig.set(path + ".y", warp.y);
 			warpsFileConfig.set(path + ".z", warp.z);
 			warpsFileConfig.set(path + ".yaw", warp.yaw);
-			warpsFileConfig.set(path + ".pith", warp.pitch);
+			warpsFileConfig.set(path + ".pitch", warp.pitch);
 			warpsFileConfig.set(path + ".icon", warp.icon.toString());
 		}
 

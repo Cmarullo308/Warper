@@ -17,13 +17,7 @@ public class Warper extends JavaPlugin {
 
 	String helpMessage;
 
-	boolean debugMessagesEnabled = true;
-
-	public static void main(String args[]) {
-		ItemStack[] fuck = new ItemStack[54];
-
-		System.out.println(fuck.length);
-	}
+	boolean debugMessagesEnabled = false;
 
 	@Override
 	public void onEnable() {
