@@ -1,5 +1,7 @@
 package me.Warper.main;
 
+import java.util.List;
+
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -45,6 +47,11 @@ public class Warper extends JavaPlugin {
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		return commandHandler.onCommand(sender, command, label, args);
+	}
+
+	@Override
+	public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
+		return commandHandler.onTabComplete(sender, command, label, args);
 	}
 
 	@SuppressWarnings("unused")

@@ -1,5 +1,7 @@
 package me.Warper.main;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import org.bukkit.Location;
@@ -48,6 +50,33 @@ public class CommandHandler {
 		}
 
 		return true;
+	}
+
+	public List<String> onTabComplete(CommandSender sender, Command command, String label, String[] args) {
+		ArrayList<String> choices = new ArrayList<String>();
+
+		if (command.getName().equalsIgnoreCase("SetPrivateWarp")
+				|| command.getName().equalsIgnoreCase("SetGlobalWarp")) {
+			if (args.length == 1) {
+				choices.add("Warp-Name");
+				return choices;
+			} else if (args.length == 2) {
+				if (!args[0].equals("")) {
+					for (Material material : Material.values()) {
+						if (material.name().toLowerCase().startsWith(args[1].toLowerCase())) {
+							choices.add(material.toString());
+						}
+					}
+				} else {
+					for (Material material : Material.values()) {
+						choices.add(material.toString());
+					}
+				}
+				return choices;
+			}
+		}
+
+		return null;
 	}
 
 	private void helpCommand(CommandSender sender, String[] args) {
