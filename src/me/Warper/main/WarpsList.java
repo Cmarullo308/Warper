@@ -48,7 +48,6 @@ public class WarpsList {
 	public void warpPlayerTo(Player player, String warpName) {
 		for (Warp warp : warps) {
 			if (warp.warpName.equals(warpName)) {
-				player.sendMessage(warp.pitch + "~~"); //delete
 				Location location = new Location(plugin.getServer().getWorld(warp.worldName), warp.x, warp.y, warp.z,
 						warp.yaw, warp.pitch);
 				player.teleport(location);
