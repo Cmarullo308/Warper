@@ -10,6 +10,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
+
 import net.md_5.bungee.api.ChatColor;
 
 public class EventListener implements Listener {
@@ -24,11 +25,11 @@ public class EventListener implements Listener {
 	@EventHandler
 	public void onInventoryClickEvent(InventoryClickEvent event) {
 		String inventoryName = event.getView().getTitle();
-		
+
 		try {
 			if (inventoryName.substring(2).equals("Warper Menu")) {
 				event.setCancelled(true);
-				switch (event.getSlot()) {
+				switch (event.getRawSlot()) {
 				case 10: // Global Warps
 					openGlobalWarpsList(event.getWhoClicked(), 1);
 					break;
@@ -63,7 +64,7 @@ public class EventListener implements Listener {
 				} else if (event.getInventory().getContents()[event.getSlot()] != null) {
 					String warpName = event.getInventory().getContents()[event.getSlot()].getItemMeta()
 							.getDisplayName();
-					warpsData.globalWarps.warpPlayerTo((Player) event.getWhoClicked(), warpName);
+					warpsData.globalWarps.warpPlayerTo((Player) event.getWhoClicked(), ChatColor.stripColor(warpName));
 				}
 			}
 			// Private Warps
@@ -83,10 +84,10 @@ public class EventListener implements Listener {
 					}
 				} else if (event.getSlot() == 49) {
 					event.getWhoClicked().openInventory(plugin.warpsData.mainMenu);
-				} else if (event.getInventory().getContents()[event.getSlot()] != null) { //----------
+				} else if (event.getInventory().getContents()[event.getSlot()] != null) { // ----------
 					String warpName = event.getInventory().getContents()[event.getSlot()].getItemMeta()
 							.getDisplayName();
-					warpsList.warpPlayerTo((Player) event.getWhoClicked(), warpName);
+					warpsList.warpPlayerTo((Player) event.getWhoClicked(), ChatColor.stripColor(warpName));
 				}
 			}
 		} catch (StringIndexOutOfBoundsException e) {

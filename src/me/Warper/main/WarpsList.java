@@ -81,48 +81,6 @@ public class WarpsList {
 		return false;
 	}
 
-//	private void setupPages() {
-//		contentPages = new ArrayList<ItemStack[]>();
-//
-//		int numOfPages = (int) (warps.size() / 45) + 1;
-//		int upTo = 0;
-//
-//		plugin.consoleMessageD(numOfPages + "~");
-//		for (int pageNum = 1; pageNum <= numOfPages; pageNum++) { // For each page
-//			ItemStack[] page = new ItemStack[54];
-//			if (pageNum != 1) {
-//				ItemStack prevButton = new ItemStack(Material.SLIME_BALL);
-//				ItemMeta meta = prevButton.getItemMeta();
-//				meta.setDisplayName(ChatColor.RED + "Page " + (pageNum - 1));
-//				prevButton.setItemMeta(meta);
-//				page[45] = prevButton;
-//			}
-//
-//			for (int i = 0; i < 45; i++) {
-//				if (i >= warps.size()) {
-//					plugin.consoleMessageD(i + "]]]]");
-//					break;
-//				}
-//				ItemStack warp = new ItemStack(warps.get(upTo).icon);
-//				ItemMeta meta = warp.getItemMeta();
-//				meta.setDisplayName(warps.get(upTo).warpName);
-//				warp.setItemMeta(meta);
-//				page[i] = warp;
-//				upTo++;
-//			}
-//
-//			if (pageNum == numOfPages) {
-//				ItemStack nextButton = new ItemStack(Material.SLIME_BALL);
-//				ItemMeta meta = nextButton.getItemMeta();
-//				meta.setDisplayName(ChatColor.RED + "Page " + (pageNum + 1));
-//				nextButton.setItemMeta(meta);
-//				page[53] = nextButton;
-//			}
-//			contentPages.add(page);
-//		}
-//
-//	}
-
 	public ItemStack[] getPage(int pageNum) {
 		updateNumberOfPages();
 
@@ -136,7 +94,7 @@ public class WarpsList {
 		int startNum = lastNum - 44;
 
 		if (pageNum != 1) {
-			ItemStack prevPage = new ItemStack(Material.SLIME_BALL);
+			ItemStack prevPage = new ItemStack(Material.LIME_STAINED_GLASS_PANE);
 			ItemMeta meta = prevPage.getItemMeta();
 			meta.setDisplayName(ChatColor.RED + "Page " + (pageNum - 1));
 			prevPage.setItemMeta(meta);
@@ -149,16 +107,26 @@ public class WarpsList {
 				break;
 			}
 
-			ItemStack warpItem = new ItemStack(warps.get(i).icon);
+			Warp warp = warps.get(i);
+
+			ItemStack warpItem = new ItemStack(warp.icon);
 			ItemMeta meta = warpItem.getItemMeta();
-			meta.setDisplayName(warps.get(i).warpName);
+			meta.setDisplayName(ChatColor.BLUE + warp.warpName);
+
+			ArrayList<String> lore = new ArrayList<String>();
+			lore.add(warp.worldName);
+			lore.add("X: " + (int) warp.x + "");
+			lore.add("Y: " + (int) warp.y + "");
+			lore.add("Z: " + (int) warp.z + "");
+			meta.setLore(lore);
+
 			warpItem.setItemMeta(meta);
 			contents[contentsLocation] = warpItem;
 			contentsLocation++;
 		}
 
 		if (pageNum < numberOfPages) {
-			ItemStack nextPage = new ItemStack(Material.SLIME_BALL);
+			ItemStack nextPage = new ItemStack(Material.LIME_STAINED_GLASS_PANE);
 			ItemMeta meta = nextPage.getItemMeta();
 			meta.setDisplayName(ChatColor.RED + "Page " + (pageNum + 1));
 			nextPage.setItemMeta(meta);
@@ -172,8 +140,17 @@ public class WarpsList {
 		closeButton.setItemMeta(meta);
 		contents[49] = closeButton;
 
-		return contents;
+		ItemStack background = new ItemStack(Material.LIGHT_BLUE_STAINED_GLASS_PANE);
+		ItemMeta backgroundMeta = background.getItemMeta();
+		backgroundMeta.setDisplayName("");
+		background.setItemMeta(backgroundMeta);
 
-//		return contentPages.get(pageNum - 1);
+		for (int i = 45; i < 54; i++) {
+			if (i != 49 && contents[i] == null) {
+				contents[i] = background.clone();
+			}
+		}
+
+		return contents;
 	}
 }

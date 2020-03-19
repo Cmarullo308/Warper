@@ -67,6 +67,17 @@ public class WarpsData {
 		close.setItemMeta(meta);
 		menuItems[22] = close;
 
+		ItemStack backgroundIcon = new ItemStack(Material.LIGHT_BLUE_STAINED_GLASS_PANE);
+		ItemMeta backgroundMeta = backgroundIcon.getItemMeta();
+		backgroundMeta.setDisplayName("");
+		backgroundIcon.setItemMeta(backgroundMeta);
+
+		for (int i = 18; i < 27; i++) {
+			if (i != 22) {
+				menuItems[i] = backgroundIcon.clone();
+			}
+		}
+
 		mainMenu = Bukkit.createInventory(null, 27, ChatColor.DARK_BLUE + "Warper Menu");
 		mainMenu.setContents(menuItems);
 	}
