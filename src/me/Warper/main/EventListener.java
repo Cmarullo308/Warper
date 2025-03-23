@@ -1,6 +1,7 @@
 package me.Warper.main;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
@@ -10,8 +11,6 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
-
-import net.md_5.bungee.api.ChatColor;
 
 public class EventListener implements Listener {
 	Warper plugin;
@@ -133,6 +132,7 @@ public class EventListener implements Listener {
 			return;
 		}
 
+		event.setCancelled(true);
 		event.getPlayer().openInventory(plugin.warpsData.mainMenu);
 	}
 }

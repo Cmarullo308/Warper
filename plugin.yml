@@ -1,8 +1,8 @@
 main: me.Warper.main.Warper
 name: Warper
 author: CJM
-version: 1.5
-api-version: 1.15
+version: 1.5.1
+api-version: 1.21
 description: Creates warps
 commands:
   SetPrivateWarp:

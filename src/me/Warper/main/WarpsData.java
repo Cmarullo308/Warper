@@ -7,6 +7,7 @@ import java.util.Set;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -15,8 +16,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-
-import net.md_5.bungee.api.ChatColor;
 
 public class WarpsData {
 	Warper plugin;
@@ -37,7 +36,7 @@ public class WarpsData {
 		ItemMeta meta;
 
 		// Global warps item
-		ItemStack globalWarps = new ItemStack(Material.OAK_SIGN);
+		ItemStack globalWarps = new ItemStack(Material.OAK_HANGING_SIGN);
 		meta = globalWarps.getItemMeta();
 		meta.setDisplayName(ChatColor.GREEN + "Global Warps");
 		globalWarps.setItemMeta(meta);
@@ -45,7 +44,7 @@ public class WarpsData {
 		// -------------
 
 		// Private Warps
-		ItemStack privateWarps = new ItemStack(Material.ACACIA_DOOR);
+		ItemStack privateWarps = new ItemStack(Material.ACACIA_HANGING_SIGN);
 		meta = privateWarps.getItemMeta();
 		meta.setDisplayName(ChatColor.YELLOW + "Private Warps");
 		privateWarps.setItemMeta(meta);
@@ -53,7 +52,7 @@ public class WarpsData {
 		// -------------
 
 		// Spawn
-		ItemStack spawn = new ItemStack(Material.ARMOR_STAND);
+		ItemStack spawn = new ItemStack(Material.PALE_OAK_HANGING_SIGN);
 		meta = spawn.getItemMeta();
 		meta.setDisplayName(ChatColor.AQUA + "Spawn");
 		spawn.setItemMeta(meta);
@@ -134,7 +133,7 @@ public class WarpsData {
 		try {
 			warpsFileConfig.save(warpsFile);
 		} catch (IOException e) {
-			plugin.getServer().getLogger().info(ChatColor.RED + "Could not save networks.yml file");
+			plugin.getServer().getLogger().info(ChatColor.RED + "Could not save warps.yml file");
 		}
 	}
 

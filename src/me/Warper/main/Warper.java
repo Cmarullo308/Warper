@@ -8,8 +8,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import me.Warper.main.EventListener;
-
 public class Warper extends JavaPlugin {
 	WarpsData warpsData = new WarpsData(this);
 	CommandHandler commandHandler = new CommandHandler(this);
@@ -60,13 +58,13 @@ public class Warper extends JavaPlugin {
 
 		if (args.length == 3) {
 			for (int i = 0; i < 43; i++) {
-				Warp testWarp = new Warp("" + i, "world", 0, 100, 0, 0, 0, Material.GRASS);
+				Warp testWarp = new Warp("" + i, "world", 0, 100, 0, 0, 0, Material.GRASS_BLOCK);
 				warpsData.globalWarps.addWarp(testWarp);
 			}
 			return;
 		}
 
-		Warp testWarp = new Warp(args[1], "world", 0, 100, 0, 0, 0, Material.GRASS);
+		Warp testWarp = new Warp(args[1], "world", 0, 100, 0, 0, 0, Material.GRASS_BLOCK);
 		warpsData.globalWarps.addWarp(testWarp);
 		consoleMessageD(warpsData.globalWarps.warps.size() + "");
 
